@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solutions — NovaMind AI</title>
+  <meta name="description" content="NovaMind AI solutions for startups, enterprises, finance, healthcare, and more." />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .page-hero {
+      padding: 160px 5% 80px;
+      background: var(--black);
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(26,107,255,0.2) 0%, transparent 70%);
+    }
+    .page-hero .section-heading { color: white; }
+    .page-hero .section-sub { color: rgba(255,255,255,0.6); margin: 16px auto 36px; text-align: center; }
+
+    /* Industry tabs */
+    .tab-nav {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      justify-content: center;
+      margin-bottom: 56px;
+    }
+    .tab-btn {
+      padding: 10px 22px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 100px;
+      background: white;
+      font-family: var(--font-body);
+      font-size: 14px; font-weight: 500;
+      color: var(--gray-600);
+      cursor: none;
+      transition: all var(--transition);
+    }
+    .tab-btn:hover, .tab-btn.active {
+      background: var(--blue-core);
+      border-color: var(--blue-core);
+      color: white;
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+
+    /* Solution case blocks */
+    .case-block {
+      background: var(--gray-100);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+    }
+    .case-metric {
+      display: flex; gap: 32px; margin-top: 32px;
+    }
+    .case-metric-item { flex: 1; }
+    .case-metric-num {
+      font-family: var(--font-display);
+      font-size: 44px;
+      color: var(--blue-core);
+      line-height: 1;
+    }
+    .case-metric-label { font-size: 13px; color: var(--gray-400); margin-top: 4px; }
+
+    /* Use case cards */
+    .use-card {
+      display: flex; gap: 20px;
+      padding: 24px;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      transition: all var(--transition);
+      margin-bottom: 16px;
+    }
+    .use-card:hover { border-color: var(--blue-mid); box-shadow: var(--shadow-sm); }
+    .use-card-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      background: var(--blue-pale);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .use-card-icon svg { width: 20px; height: 20px; stroke: var(--blue-core); }
+    .use-card-title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+    .use-card-text { font-size: 13px; color: var(--gray-600); line-height: 1.6; }
+
+    /* Industry hero cards */
+    .industry-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    .ind-card {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--gray-200);
+      transition: all var(--transition);
+      cursor: none;
+    }
+    .ind-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .ind-card-header {
+      padding: 32px 28px 24px;
+      background: var(--gray-100);
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .ind-card-icon {
+      font-size: 32px; margin-bottom: 16px;
+    }
+    .ind-card-title { font-family: var(--font-display); font-size: 24px; letter-spacing: 0.5px; }
+    .ind-card-body { padding: 24px 28px; }
+    .ind-card-body ul { list-style: none; }
+    .ind-card-body li {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 14px; color: var(--gray-600);
+      margin-bottom: 10px; line-height: 1.5;
+    }
+    .ind-card-body li::before { content: '→'; color: var(--blue-core); flex-shrink: 0; }
+
+    @media (max-width:900px) {
+      .tab-panel.active { grid-template-columns: 1fr; }
+      .industry-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width:600px) {
+      .industry-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon"></div>
+      <span class="nav-logo-text">Nova<span>Mind</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="features.html">Features</a>
+      <a href="solutions.html">Solutions</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="contact.html" class="btn-nav">Get Started</a>
+    </div>
+    <button class="nav-hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div style="position:relative;z-index:2" class="reveal">
+      <div class="section-label" style="background:rgba(255,255,255,0.1);color:white;justify-content:center;display:inline-flex">Industry Solutions</div>
+      <h1 class="section-heading" style="margin:16px auto;max-width:700px;color:white">AI FOR EVERY<br><span>INDUSTRY</span></h1>
+      <p class="section-sub">Whether you're a fintech startup or a global enterprise, NovaMind adapts to your domain with purpose-built intelligence.</p>
+      <a href="contact.html" class="btn-primary">Find Your Solution</a>
+    </div>
+  </section>
+
+  <!-- TABS -->
+  <section class="section">
+    <div class="container">
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="startup">Startups</button>
+        <button class="tab-btn" data-tab="enterprise">Enterprise</button>
+        <button class="tab-btn" data-tab="finance">Finance</button>
+        <button class="tab-btn" data-tab="healthcare">Healthcare</button>
+        <button class="tab-btn" data-tab="ecommerce">E-Commerce</button>
+      </div>
+
+      <!-- Startup -->
+      <div class="tab-panel active" id="tab-startup">
+        <div class="reveal">
+          <div class="section-label">For Startups</div>
+          <h2 class="section-heading" style="font-size:clamp(36px,4vw,60px)">MOVE FAST.<br>DECIDE<br><span>FASTER.</span></h2>
+          <p class="section-sub" style="margin:20px 0">NovaMind gives early-stage teams enterprise-grade AI at startup-friendly pricing. Spin up in minutes, scale without limits.</p>
+          <a href="pricing.html" class="btn-primary btn-sm">See Starter Plan</a>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <div class="case-block">
+            <div class="mono-tag">Case Study — Archon AI</div>
+            <h3 style="font-family:var(--font-display);font-size:28px;margin:12px 0 8px">From idea to AI-powered product in 3 weeks</h3>
+            <p style="font-size:14px;color:var(--gray-600);line-height:1.65">Archon AI used NovaMind to build their predictive churn model and automated customer onboarding sequence without a dedicated ML team.</p>
+            <div class="case-metric">
+              <div class="case-metric-item">
+                <div class="case-metric-num">3x</div>
+                <div class="case-metric-label">User retention lift</div>
+              </div>
+              <div class="case-metric-item">
+                <div class="case-metric-num">18d</div>
+                <div class="case-metric-label">Time to deploy</div>
+              </div>
+              <div class="case-metric-item">
+                <div class="case-metric-num">$0</div>
+                <div class="case-metric-label">ML eng. cost</div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:20px">
+            <div class="use-card">
+              <div class="use-card-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg></div>
+              <div><div class="use-card-title">Fast Onboarding</div><div class="use-card-text">Launch your first automation in under 30 minutes.</div></div>
+            </div>
+            <div class="use-card">
+              <div class="use-card-icon"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75"/></svg></div>
+              <div><div class="use-card-title">Usage-Based Billing</div><div class="use-card-text">Pay only for what you use — scale down without penalty.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="tab-panel" id="tab-enterprise">
+        <div class="reveal">
+          <div class="section-label">For Enterprise</div>
+          <h2 class="section-heading" style="font-size:clamp(36px,4vw,60px)">ENTERPRISE<br><span>GRADE.</span><br>ALWAYS.</h2>
+          <p class="section-sub" style="margin:20px 0">SOC 2 Type II certified, GDPR compliant, and deployable on your own cloud or on-premise. We match your security standards.</p>
+          <a href="contact.html" class="btn-primary btn-sm">Talk to Sales</a>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <div class="case-block">
+            <div class="mono-tag">Case Study — Vantara Systems</div>
+            <h3 style="font-family:var(--font-display);font-size:28px;margin:12px 0 8px">Unifying 14 data silos into one AI command center</h3>
+            <p style="font-size:14px;color:var(--gray-600);line-height:1.65">Vantara replaced a patchwork of BI tools with NovaMind's enterprise suite, reducing operational overhead by 40% in 60 days.</p>
+            <div class="case-metric">
+              <div class="case-metric-item"><div class="case-metric-num">40%</div><div class="case-metric-label">Ops cost reduction</div></div>
+              <div class="case-metric-item"><div class="case-metric-num">14→1</div><div class="case-metric-label">Tools consolidated</div></div>
+              <div class="case-metric-item"><div class="case-metric-num">60d</div><div class="case-metric-label">To full deployment</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Finance -->
+      <div class="tab-panel" id="tab-finance">
+        <div class="reveal">
+          <div class="section-label">For Finance</div>
+          <h2 class="section-heading" style="font-size:clamp(36px,4vw,60px)">RISK AT<br>MACHINE<br><span>SPEED.</span></h2>
+          <p class="section-sub" style="margin:20px 0">Real-time fraud detection, regulatory reporting automation, and portfolio risk modeling — built for financial institutions.</p>
+          <a href="contact.html" class="btn-primary btn-sm">Request Demo</a>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <div class="case-block">
+            <div class="mono-tag">Case Study — Helix Capital</div>
+            <h3 style="font-family:var(--font-display);font-size:28px;margin:12px 0 8px">Fraud detection with 99.7% accuracy in real-time</h3>
+            <p style="font-size:14px;color:var(--gray-600);line-height:1.65">Helix Capital integrated NovaMind's anomaly detection into their transaction pipeline, cutting fraud losses by 68% in Q1.</p>
+            <div class="case-metric">
+              <div class="case-metric-item"><div class="case-metric-num">99.7%</div><div class="case-metric-label">Detection accuracy</div></div>
+              <div class="case-metric-item"><div class="case-metric-num">68%</div><div class="case-metric-label">Fraud loss reduction</div></div>
+              <div class="case-metric-item"><div class="case-metric-num">&lt;20ms</div><div class="case-metric-label">Detection latency</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Healthcare -->
+      <div class="tab-panel" id="tab-healthcare">
+        <div class="reveal">
+          <div class="section-label">For Healthcare</div>
+          <h2 class="section-heading" style="font-size:clamp(36px,4vw,60px)">CARE<br>POWERED<br><span>BY DATA.</span></h2>
+          <p class="section-sub" style="margin:20px 0">HIPAA-compliant AI infrastructure for patient outcome prediction, resource optimization, and clinical workflow automation.</p>
+          <a href="contact.html" class="btn-primary btn-sm">Request Demo</a>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <div class="case-block">
+            <div class="mono-tag">Case Study — MediCare Group</div>
+            <h3 style="font-family:var(--font-display);font-size:28px;margin:12px 0 8px">Reducing readmission rates with predictive AI</h3>
+            <p style="font-size:14px;color:var(--gray-600);line-height:1.65">MediCare deployed NovaMind to predict 30-day readmission risk, enabling proactive interventions and reducing readmissions by 31%.</p>
+            <div class="case-metric">
+              <div class="case-metric-item"><div class="case-metric-num">31%</div><div class="case-metric-label">Readmission drop</div></div>
+              <div class="case-metric-item"><div class="case-metric-num">HIPAA</div><div class="case-metric-label">Fully compliant</div></div>
+              <div class="case-metric-item"><div class="case-metric-num">24h</div><div class="case-metric-label">Implementation</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- E-Commerce -->
+      <div class="tab-panel" id="tab-ecommerce">
+        <div class="reveal">
+          <div class="section-label">For E-Commerce</div>
+          <h2 class="section-heading" style="font-size:clamp(36px,4vw,60px)">SELL<br>SMARTER.<br><span>ALWAYS.</span></h2>
+          <p class="section-sub" style="margin:20px 0">Dynamic pricing, demand forecasting, churn prediction, and personalization engines built for high-volume commerce.</p>
+          <a href="contact.html" class="btn-primary btn-sm">Get Started</a>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <div class="case-block">
+            <div class="mono-tag">Case Study — LuxShop</div>
+            <h3 style="font-family:var(--font-display);font-size:28px;margin:12px 0 8px">28% revenue uplift from dynamic pricing AI</h3>
+            <p style="font-size:14px;color:var(--gray-600);line-height:1.65">LuxShop implemented NovaMind's demand forecasting and dynamic pricing engine, increasing average order value while reducing overstock by 42%.</p>
+            <div class="case-metric">
+              <div class="case-metric-item"><div class="case-metric-num">28%</div><div class="case-metric-label">Revenue uplift</div></div>
+              <div class="case-metric-item"><div class="case-metric-num">42%</div><div class="case-metric-label">Overstock reduction</div></div>
+              <div class="case-metric-item"><div class="case-metric-num">5.1x</div><div class="case-metric-label">ROI in 90 days</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- INDUSTRY CARDS -->
+  <section class="section" style="background:var(--gray-100)">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:56px" class="reveal">
+        <div class="section-label" style="display:inline-flex">All Industries</div>
+        <h2 class="section-heading" style="margin-top:16px">WHERE NOVAMIND<br><span>EXCELS</span></h2>
+      </div>
+      <div class="industry-grid">
+        <div class="ind-card reveal reveal-delay-1">
+          <div class="ind-card-header">
+            <div class="ind-card-icon">🏦</div>
+            <div class="ind-card-title">FINANCIAL SERVICES</div>
+          </div>
+          <div class="ind-card-body">
+            <ul>
+              <li>Real-time fraud detection & AML screening</li>
+              <li>Automated regulatory reporting (SEC, FINRA)</li>
+              <li>Portfolio risk scoring and stress testing</li>
+              <li>Algorithmic credit underwriting</li>
+            </ul>
+          </div>
+        </div>
+        <div class="ind-card reveal reveal-delay-2">
+          <div class="ind-card-header">
+            <div class="ind-card-icon">🏥</div>
+            <div class="ind-card-title">HEALTHCARE & LIFE SCI</div>
+          </div>
+          <div class="ind-card-body">
+            <ul>
+              <li>Patient readmission risk prediction</li>
+              <li>Clinical trial data analysis</li>
+              <li>Drug interaction detection models</li>
+              <li>Operational bed & staff optimization</li>
+            </ul>
+          </div>
+        </div>
+        <div class="ind-card reveal reveal-delay-3">
+          <div class="ind-card-header">
+            <div class="ind-card-icon">🛒</div>
+            <div class="ind-card-title">E-COMMERCE & RETAIL</div>
+          </div>
+          <div class="ind-card-body">
+            <ul>
+              <li>Demand forecasting & inventory AI</li>
+              <li>Dynamic pricing optimization</li>
+              <li>Personalization at scale</li>
+              <li>Churn prediction & re-engagement</li>
+            </ul>
+          </div>
+        </div>
+        <div class="ind-card reveal reveal-delay-1">
+          <div class="ind-card-header">
+            <div class="ind-card-icon">🏭</div>
+            <div class="ind-card-title">MANUFACTURING</div>
+          </div>
+          <div class="ind-card-body">
+            <ul>
+              <li>Predictive maintenance & asset IoT</li>
+              <li>Quality control defect detection</li>
+              <li>Supply chain disruption alerts</li>
+              <li>Energy usage optimization</li>
+            </ul>
+          </div>
+        </div>
+        <div class="ind-card reveal reveal-delay-2">
+          <div class="ind-card-header">
+            <div class="ind-card-icon">🚀</div>
+            <div class="ind-card-title">TECH & SAAS</div>
+          </div>
+          <div class="ind-card-body">
+            <ul>
+              <li>Product usage analytics & funnels</li>
+              <li>Feature adoption forecasting</li>
+              <li>Automated DevOps alerting</li>
+              <li>LTV and expansion revenue modeling</li>
+            </ul>
+          </div>
+        </div>
+        <div class="ind-card reveal reveal-delay-3">
+          <div class="ind-card-header">
+            <div class="ind-card-icon">📡</div>
+            <div class="ind-card-title">MEDIA & PUBLISHING</div>
+          </div>
+          <div class="ind-card-body">
+            <ul>
+              <li>Content performance prediction</li>
+              <li>Subscriber churn prevention</li>
+              <li>Ad spend optimization models</li>
+              <li>Audience segmentation AI</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo" style="margin-bottom:0"><div class="nav-logo-icon"></div><span class="nav-logo-text" style="color:white">Nova<span>Mind</span></span></div>
+          <p>Intelligence, Engineered.</p>
+        </div>
+        <div class="footer-col"><h4>Product</h4><a href="features.html">Features</a><a href="pricing.html">Pricing</a><a href="solutions.html">Solutions</a></div>
+        <div class="footer-col"><h4>Company</h4><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+        <div class="footer-col"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a></div>
+      </div>
+      <div class="footer-bottom"><span>© 2025 NovaMind AI, Inc. All rights reserved.</span></div>
+    </div>
+  </footer>
+
+  <script src="shared.js"></script>
+  <script>
+    // Tabs
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

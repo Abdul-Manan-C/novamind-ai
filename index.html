@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NovaMind AI — Intelligence, Engineered.</title>
+  <meta name="description" content="NovaMind AI is your next-generation AI command center for automation, analytics, and predictive intelligence." />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 120px 5% 80px;
+      position: relative; overflow: hidden;
+    }
+    #particle-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      z-index: 0; pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 780px; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 8px 18px;
+      background: var(--blue-pale);
+      border: 1px solid var(--blue-mid);
+      border-radius: 100px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--blue-core);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    .hero-eyebrow-dot {
+      width: 7px; height: 7px;
+      background: var(--blue-core);
+      border-radius: 50%;
+      animation: pulse-dot 1.5s infinite;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(64px, 9vw, 120px);
+      line-height: 0.92;
+      letter-spacing: 1px;
+      color: var(--black);
+      margin-bottom: 28px;
+    }
+    .hero-title .blue { color: var(--blue-core); }
+    .hero-title .typed-wrap {
+      display: inline-block;
+      min-width: 3ch;
+      border-right: 3px solid var(--blue-core);
+      animation: blink 0.8s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{border-color:var(--blue-core)} 50%{border-color:transparent} }
+
+    .hero-sub {
+      font-size: 18px;
+      color: var(--gray-600);
+      line-height: 1.7;
+      max-width: 540px;
+      margin-bottom: 44px;
+    }
+    .hero-cta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .hero-trust {
+      margin-top: 64px;
+      display: flex; align-items: center; gap: 20px;
+      font-size: 13px; color: var(--gray-400);
+    }
+    .hero-avatars { display: flex; }
+    .hero-avatars span {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 2px solid white;
+      margin-right: -10px;
+      background: var(--blue-pale);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--blue-core);
+    }
+
+    /* ─── FLOATING DASHBOARD ─── */
+    .hero-dashboard-wrap {
+      position: absolute; right: 4%; top: 50%;
+      transform: translateY(-50%);
+      width: 46%;
+      z-index: 2;
+      perspective: 1000px;
+    }
+    .dashboard {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 32px 80px rgba(26,107,255,0.2), 0 0 0 1px rgba(26,107,255,0.08);
+      padding: 20px;
+      transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+      transform-style: preserve-3d;
+    }
+    .db-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .db-title {
+      font-family: var(--font-display);
+      font-size: 18px; letter-spacing: 0.5px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .db-title-dot {
+      width: 8px; height: 8px;
+      background: var(--blue-core); border-radius: 50%;
+      animation: pulse-dot 2s infinite;
+    }
+    .db-controls { display: flex; gap: 6px; }
+    .db-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+    .db-dot-r { background: #ff5f57; }
+    .db-dot-y { background: #febc2e; }
+    .db-dot-g { background: #28c840; }
+
+    .db-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .db-card {
+      background: var(--gray-100);
+      border-radius: 12px;
+      padding: 16px;
+      position: relative; overflow: hidden;
+    }
+    .db-card-wide { grid-column: span 2; }
+    .db-card-label {
+      font-size: 10px;
+      font-family: var(--font-mono);
+      color: var(--gray-400);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .db-card-value {
+      font-family: var(--font-display);
+      font-size: 32px;
+      color: var(--blue-core);
+      line-height: 1;
+    }
+    .db-card-change {
+      font-size: 11px;
+      color: #22c55e;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    /* Mini bar chart */
+    .mini-bars {
+      display: flex; align-items: flex-end; gap: 4px;
+      height: 48px; margin-top: 8px;
+    }
+    .mini-bar {
+      flex: 1; background: var(--blue-mid);
+      border-radius: 3px 3px 0 0;
+      transition: height 1s ease;
+    }
+    .mini-bar.highlight { background: var(--blue-core); }
+
+    /* Mini sparkline */
+    .mini-sparkline {
+      width: 100%; height: 48px; margin-top: 8px;
+    }
+
+    /* Donut */
+    .db-donut-wrap {
+      display: flex; align-items: center; gap: 16px; margin-top: 8px;
+    }
+    .db-donut {
+      width: 64px; height: 64px; flex-shrink: 0;
+    }
+    .db-legend { }
+    .db-legend-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; color: var(--gray-600); margin-bottom: 4px;
+    }
+    .db-legend-dot {
+      width: 8px; height: 8px; border-radius: 2px;
+    }
+
+    /* Floating widgets */
+    .widget {
+      position: absolute;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(26,107,255,0.14);
+      padding: 12px 16px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+    }
+    .widget-1 {
+      bottom: -24px; left: -32px;
+      animation: float1 4s ease-in-out infinite;
+    }
+    .widget-2 {
+      top: -20px; right: -24px;
+      animation: float2 5s ease-in-out infinite;
+    }
+    @keyframes float1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    @keyframes float2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+    .widget-num {
+      font-family: var(--font-display);
+      font-size: 22px;
+      color: var(--blue-core);
+    }
+    .widget-label { font-size: 10px; color: var(--gray-400); letter-spacing: 0.5px; }
+    .widget-row { display: flex; align-items: center; gap: 6px; color: var(--gray-800); }
+    .widget-dot { width: 6px; height: 6px; background: #22c55e; border-radius: 50%; }
+
+    /* ─── LOGOS STRIP ─── */
+    .logos-strip {
+      padding: 40px 5%;
+      border-top: 1px solid var(--gray-200);
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .logos-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 40px; flex-wrap: wrap;
+    }
+    .logos-label {
+      font-size: 12px; font-family: var(--font-mono);
+      color: var(--gray-400); letter-spacing: 1px;
+      text-transform: uppercase; white-space: nowrap;
+    }
+    .logos-items { display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
+    .logo-item {
+      font-family: var(--font-display);
+      font-size: 20px;
+      letter-spacing: 1px;
+      color: var(--gray-400);
+      opacity: 0.6;
+      transition: opacity var(--transition);
+    }
+    .logo-item:hover { opacity: 1; color: var(--black); }
+
+    /* ─── FEATURES GRID ─── */
+    .features-section { background: var(--gray-100); }
+    .features-header { text-align: center; margin-bottom: 64px; }
+
+    /* ─── HOW IT WORKS ─── */
+    .steps { display: flex; flex-direction: column; gap: 0; }
+    .step {
+      display: grid; grid-template-columns: 80px 1fr;
+      gap: 32px; padding: 40px 0;
+      border-bottom: 1px solid var(--gray-200);
+      align-items: start;
+    }
+    .step:last-child { border-bottom: none; }
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 64px;
+      color: var(--blue-pale);
+      line-height: 1;
+      transition: color var(--transition);
+    }
+    .step:hover .step-num { color: var(--blue-core); }
+    .step-title {
+      font-family: var(--font-display);
+      font-size: 28px; margin-bottom: 10px;
+    }
+    .step-text { font-size: 15px; color: var(--gray-600); line-height: 1.7; }
+
+    /* ─── STATS SECTION ─── */
+    .stats-section {
+      background: var(--black);
+      padding: 80px 5%;
+    }
+    .stats-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: 48px; text-align: center;
+    }
+    .stat-num { color: var(--blue-light); }
+    .stat-label { color: rgba(255,255,255,0.5); }
+    .stats-heading {
+      font-family: var(--font-display);
+      font-size: clamp(32px,5vw,60px);
+      color: white;
+      text-align: center;
+      margin-bottom: 64px;
+      letter-spacing: 1px;
+    }
+    .stats-heading span { color: var(--blue-light); }
+
+    /* ─── TESTIMONIALS ─── */
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 24px;
+    }
+    .tcard {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      transition: all var(--transition);
+    }
+    .tcard:hover {
+      border-color: var(--blue-mid);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+    }
+    .tcard-quote {
+      font-size: 15px; line-height: 1.75;
+      color: var(--gray-800);
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+    .tcard-author { display: flex; align-items: center; gap: 12px; }
+    .tcard-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--blue-pale);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; color: var(--blue-core); font-size: 16px;
+    }
+    .tcard-name { font-weight: 600; font-size: 14px; }
+    .tcard-role { font-size: 12px; color: var(--gray-400); }
+    .stars { color: #f59e0b; font-size: 13px; margin-bottom: 16px; }
+
+    /* ─── CTA SECTION ─── */
+    .cta-section {
+      background: var(--blue-core);
+      padding: 100px 5%;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: 'NOVAMIND';
+      position: absolute;
+      font-family: var(--font-display);
+      font-size: 18vw;
+      color: rgba(255,255,255,0.04);
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .cta-title {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 7vw, 96px);
+      color: white;
+      line-height: 0.95;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+    .cta-sub { font-size: 18px; color: rgba(255,255,255,0.75); margin-bottom: 40px; }
+    .btn-white {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 36px;
+      background: white;
+      color: var(--blue-core);
+      border-radius: var(--radius);
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: none;
+      transition: all var(--transition);
+    }
+    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(0,0,0,0.2); }
+
+    @media (max-width: 1100px) {
+      .hero-dashboard-wrap { display: none; }
+      .hero-content { max-width: 100%; }
+    }
+    @media (max-width: 900px) {
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+      .testimonial-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Cursor -->
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- Nav -->
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon"></div>
+      <span class="nav-logo-text">Nova<span>Mind</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="features.html">Features</a>
+      <a href="solutions.html">Solutions</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="contact.html" class="btn-nav">Get Started</a>
+    </div>
+    <button class="nav-hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-dot"></div>
+        Now in Public Beta — Join 12,000+ teams
+      </div>
+
+      <h1 class="hero-title">
+        UNLEASH<br>
+        THE <span class="blue">POWER</span><br>
+        OF <span class="blue"><span class="typed-wrap" id="typed-hero"></span></span>
+      </h1>
+
+      <p class="hero-sub">
+        NovaMind AI is your next-generation command center — automating workflows, predicting trends, and delivering insights at machine speed.
+      </p>
+
+      <div class="hero-cta">
+        <a href="contact.html" class="btn-primary">
+          Start Free Trial
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="features.html" class="btn-outline">Explore Features</a>
+      </div>
+
+      <div class="hero-trust">
+        <div class="hero-avatars">
+          <span>J</span><span>S</span><span>R</span><span>K</span>
+        </div>
+        <span>Trusted by <strong>12,000+</strong> AI teams worldwide</span>
+      </div>
+    </div>
+
+    <!-- Floating Dashboard -->
+    <div class="hero-dashboard-wrap">
+      <div class="dashboard" data-tilt id="hero-dash">
+        <div class="db-header">
+          <div class="db-controls">
+            <div class="db-dot db-dot-r"></div>
+            <div class="db-dot db-dot-y"></div>
+            <div class="db-dot db-dot-g"></div>
+          </div>
+          <div class="db-title">
+            <div class="db-title-dot"></div>
+            Dashboard
+          </div>
+          <span class="mono-tag">LIVE</span>
+        </div>
+
+        <div class="db-grid">
+          <!-- Revenue -->
+          <div class="db-card db-card-wide">
+            <div class="db-card-label">Predictive Revenue Growth</div>
+            <svg class="mini-sparkline" viewBox="0 0 300 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0 50 C40 48 60 40 80 35 C100 30 120 38 140 25 C160 12 180 18 200 10 C220 2 240 8 260 5 C280 2 290 4 300 3" stroke="#1a6bff" stroke-width="2" fill="none"/>
+              <path d="M0 50 C40 48 60 40 80 35 C100 30 120 38 140 25 C160 12 180 18 200 10 C220 2 240 8 260 5 C280 2 290 4 300 3 L300 60 L0 60 Z" fill="rgba(26,107,255,0.08)"/>
+              <circle cx="200" cy="10" r="4" fill="#1a6bff"/>
+            </svg>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+              <div class="db-card-value">$1.28M</div>
+              <div class="db-card-change">▲ 23.5% vs last qtr</div>
+            </div>
+          </div>
+          <!-- Accuracy -->
+          <div class="db-card">
+            <div class="db-card-label">Data Accuracy</div>
+            <div class="db-card-value">99.1%</div>
+            <div class="db-card-change">▲ 0.3%</div>
+            <div class="mini-bars">
+              <div class="mini-bar" style="height:30%"></div>
+              <div class="mini-bar" style="height:50%"></div>
+              <div class="mini-bar" style="height:40%"></div>
+              <div class="mini-bar highlight" style="height:80%"></div>
+              <div class="mini-bar" style="height:65%"></div>
+              <div class="mini-bar highlight" style="height:90%"></div>
+            </div>
+          </div>
+          <!-- Engagement -->
+          <div class="db-card">
+            <div class="db-card-label">User Engagement</div>
+            <div class="db-donut-wrap">
+              <svg class="db-donut" viewBox="0 0 64 64">
+                <circle cx="32" cy="32" r="26" fill="none" stroke="#e8f0ff" stroke-width="8"/>
+                <circle cx="32" cy="32" r="26" fill="none" stroke="#1a6bff" stroke-width="8"
+                  stroke-dasharray="130 36" stroke-linecap="round"
+                  transform="rotate(-90 32 32)"/>
+                <text x="32" y="37" text-anchor="middle" fill="#1a6bff" font-size="13" font-weight="700" font-family="'Bebas Neue'">80%</text>
+              </svg>
+              <div class="db-legend">
+                <div class="db-legend-item">
+                  <div class="db-legend-dot" style="background:var(--blue-core)"></div>Active
+                </div>
+                <div class="db-legend-item">
+                  <div class="db-legend-dot" style="background:var(--blue-pale)"></div>Passive
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating widgets -->
+      <div class="widget widget-1">
+        <div class="widget-num">4.2x</div>
+        <div class="widget-label">ROI Increase</div>
+      </div>
+      <div class="widget widget-2">
+        <div class="widget-row"><div class="widget-dot"></div> 16 models active</div>
+        <div class="widget-label" style="margin-top:4px">Processing 2.4k req/s</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGOS -->
+  <div class="logos-strip">
+    <div class="logos-inner">
+      <span class="logos-label">Trusted by industry leaders</span>
+      <div class="logos-items">
+        <span class="logo-item">NEXUS CORP</span>
+        <span class="logo-item">ARCHON AI</span>
+        <span class="logo-item">VANTARA</span>
+        <span class="logo-item">HELIX SYS</span>
+        <span class="logo-item">QUBIT LAB</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="section features-section">
+    <div class="container">
+      <div class="features-header reveal">
+        <div class="section-label">Core Capabilities</div>
+        <h2 class="section-heading">BUILT FOR<br><span>SCALE</span></h2>
+        <p class="section-sub" style="margin:16px auto 0">Every feature engineered for teams that move fast and demand precision at every layer.</p>
+      </div>
+      <div class="grid-3">
+        <div class="card reveal reveal-delay-1">
+          <div class="card-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15m-6.75-2.25h6.375"/></svg>
+          </div>
+          <div class="card-title">AI-DRIVEN AUTOMATION</div>
+          <p class="card-text">Deploy intelligent agents that orchestrate complex multi-step workflows across your entire stack without human intervention.</p>
+          <div class="divider"></div>
+          <a href="features.html" style="font-size:13px;color:var(--blue-core);font-weight:600;text-decoration:none">Learn more →</a>
+        </div>
+        <div class="card reveal reveal-delay-2">
+          <div class="card-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zm6-4.5C9 8.004 9.504 7.5 10.125 7.5h2.25c.621 0 1.125.504 1.125 1.125v10.5c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 019 19.125V8.625zm6 3.75c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v7.5c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 0115 19.875v-7.5z"/></svg>
+          </div>
+          <div class="card-title">PREDICTIVE ANALYTICS</div>
+          <p class="card-text">Forecast revenue, user behavior, and market shifts with ML models trained on your proprietary data — updated in real-time.</p>
+          <div class="divider"></div>
+          <a href="features.html" style="font-size:13px;color:var(--blue-core);font-weight:600;text-decoration:none">Learn more →</a>
+        </div>
+        <div class="card reveal reveal-delay-3">
+          <div class="card-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg>
+          </div>
+          <div class="card-title">INTELLIGENT INTEGRATION</div>
+          <p class="card-text">Connect NovaMind to 200+ tools via REST API, webhooks, and native connectors. Your stack, unified under one intelligent layer.</p>
+          <div class="divider"></div>
+          <a href="features.html" style="font-size:13px;color:var(--blue-core);font-weight:600;text-decoration:none">Learn more →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <div class="container">
+      <div class="grid-2">
+        <div class="reveal">
+          <div class="section-label">How It Works</div>
+          <h2 class="section-heading">THREE STEPS.<br><span>INFINITE</span><br>SCALE.</h2>
+          <p class="section-sub" style="margin-top:20px">Go from onboarding to fully automated intelligence in under 48 hours.</p>
+        </div>
+        <div class="steps reveal reveal-delay-1">
+          <div class="step">
+            <div class="step-num">01</div>
+            <div>
+              <div class="step-title">CONNECT YOUR DATA</div>
+              <p class="step-text">Plug in your databases, APIs, and third-party services. NovaMind ingests and normalizes your data automatically.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">02</div>
+            <div>
+              <div class="step-title">TRAIN & CONFIGURE</div>
+              <p class="step-text">Fine-tune NovaMind's models on your domain with zero code. Set automation rules, thresholds, and alert conditions.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">03</div>
+            <div>
+              <div class="step-title">DEPLOY & SCALE</div>
+              <p class="step-text">Push to production with one click. Monitor performance, iterate models, and scale across regions effortlessly.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-section">
+    <div class="container" style="max-width:1200px;margin:0 auto">
+      <h2 class="stats-heading reveal">THE NUMBERS<br>DON'T <span>LIE</span></h2>
+      <div class="stats-grid">
+        <div class="reveal reveal-delay-1" style="text-align:center">
+          <div class="stat-num" data-count="99.9" data-suffix="%" data-dec="1">0%</div>
+          <div class="stat-label">Uptime SLA</div>
+        </div>
+        <div class="reveal reveal-delay-2" style="text-align:center">
+          <div class="stat-num" data-count="12000" data-suffix="+" data-dec="0">0+</div>
+          <div class="stat-label">Teams Onboarded</div>
+        </div>
+        <div class="reveal reveal-delay-3" style="text-align:center">
+          <div class="stat-num" data-count="4.2" data-suffix="x" data-dec="1">0x</div>
+          <div class="stat-label">Average ROI Gain</div>
+        </div>
+        <div class="reveal reveal-delay-4" style="text-align:center">
+          <div class="stat-num" data-count="200" data-suffix="+" data-dec="0">0+</div>
+          <div class="stat-label">Native Integrations</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:56px" class="reveal">
+        <div class="section-label">Testimonials</div>
+        <h2 class="section-heading">WHAT TEAMS<br><span>SAY</span></h2>
+      </div>
+      <div class="testimonial-grid">
+        <div class="tcard reveal reveal-delay-1">
+          <div class="stars">★★★★★</div>
+          <p class="tcard-quote">"NovaMind cut our reporting time from 3 days to 4 hours. The predictive layer is genuinely uncanny — it flagged a revenue dip two weeks before our own finance team did."</p>
+          <div class="tcard-author">
+            <div class="tcard-avatar">J</div>
+            <div>
+              <div class="tcard-name">Jordan Reeve</div>
+              <div class="tcard-role">VP of Data, Nexus Corp</div>
+            </div>
+          </div>
+        </div>
+        <div class="tcard reveal reveal-delay-2">
+          <div class="stars">★★★★★</div>
+          <p class="tcard-quote">"We replaced three separate analytics tools with NovaMind. The ROI was visible in the first month. The integration API is the cleanest I've worked with in a decade."</p>
+          <div class="tcard-author">
+            <div class="tcard-avatar">S</div>
+            <div>
+              <div class="tcard-name">Sofia Marchetti</div>
+              <div class="tcard-role">CTO, Vantara Systems</div>
+            </div>
+          </div>
+        </div>
+        <div class="tcard reveal reveal-delay-3">
+          <div class="stars">★★★★★</div>
+          <p class="tcard-quote">"The automation workflows are insanely powerful. We deployed 12 custom AI agents in a weekend with zero ML expertise on our team. Game-changing platform."</p>
+          <div class="tcard-author">
+            <div class="tcard-avatar">R</div>
+            <div>
+              <div class="tcard-name">Rayan Osei</div>
+              <div class="tcard-role">Head of Ops, Qubit Lab</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container" style="position:relative;z-index:2">
+      <div class="reveal">
+        <div class="section-label" style="background:rgba(255,255,255,0.15);color:white;margin-bottom:28px">Limited Beta Access</div>
+        <h2 class="cta-title">READY TO<br>ENGINEER<br>INTELLIGENCE?</h2>
+        <p class="cta-sub">Start with a 14-day free trial. No card required. Cancel anytime.</p>
+        <a href="contact.html" class="btn-white">
+          Get Early Access
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo" style="margin-bottom:0">
+            <div class="nav-logo-icon"></div>
+            <span class="nav-logo-text" style="color:white">Nova<span>Mind</span></span>
+          </div>
+          <p>Intelligence, Engineered. The next-generation AI command center for teams that demand more.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="features.html">Features</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="solutions.html">Solutions</a>
+          <a href="#">Changelog</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="about.html">About</a>
+          <a href="#">Blog</a>
+          <a href="#">Careers</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Security</a>
+          <a href="#">Cookie Policy</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 NovaMind AI, Inc. All rights reserved.</span>
+        <span>Built with <span style="color:var(--blue-light)">■</span> Intelligence</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="shared.js"></script>
+  <script>
+    // Typed hero
+    typeEffect(document.getElementById('typed-hero'), ['AI.', 'DATA.', 'SCALE.', 'THE FUTURE.'], 90, 1800);
+
+    // Dashboard tilt
+    (function(){
+      const dash = document.getElementById('hero-dash');
+      if(!dash) return;
+      dash.addEventListener('mousemove', e => {
+        const r = dash.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        dash.style.transform = `perspective(1200px) rotateY(${x * 14}deg) rotateX(${-y * 10}deg) scale3d(1.02,1.02,1.02)`;
+      });
+      dash.addEventListener('mouseleave', () => {
+        dash.style.transform = 'perspective(1200px) rotateY(-5deg) rotateX(3deg)';
+      });
+      dash.style.transform = 'perspective(1200px) rotateY(-5deg) rotateX(3deg)';
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — NovaMind AI</title>
+  <meta name="description" content="Meet the team behind NovaMind AI. Our mission, values, and story." />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .page-hero {
+      padding: 160px 5% 100px;
+      background: var(--black);
+      position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 20% 50%, rgba(26,107,255,0.15) 0%, transparent 60%);
+    }
+    .hero-inner {
+      position: relative; z-index: 2;
+      max-width: 700px;
+    }
+    .hero-inner .section-heading { color: white; }
+    .hero-inner .section-sub { color: rgba(255,255,255,0.6); margin-top: 16px; }
+
+    /* Mission */
+    .mission-block {
+      padding: 80px 5%;
+      background: var(--blue-core);
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .mission-block::before {
+      content: '"';
+      position: absolute;
+      font-family: var(--font-display);
+      font-size: 400px;
+      color: rgba(255,255,255,0.04);
+      top: -100px; left: 50%;
+      transform: translateX(-50%);
+      line-height: 1;
+    }
+    .mission-quote {
+      font-family: var(--font-display);
+      font-size: clamp(28px,4vw,52px);
+      color: white;
+      line-height: 1.1;
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative; z-index: 2;
+    }
+    .mission-attr {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      font-family: var(--font-mono);
+      margin-top: 24px;
+      position: relative; z-index: 2;
+    }
+
+    /* Timeline */
+    .timeline { position: relative; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 80px; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--blue-core), transparent);
+    }
+    .tl-item {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 32px;
+      padding: 32px 0;
+      position: relative;
+    }
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: 73px; top: 40px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--blue-core);
+      border: 3px solid white;
+      box-shadow: 0 0 0 3px var(--blue-pale);
+    }
+    .tl-year {
+      font-family: var(--font-display);
+      font-size: 32px;
+      color: var(--blue-core);
+      text-align: right;
+      padding-right: 16px;
+    }
+    .tl-content {}
+    .tl-title { font-family: var(--font-display); font-size: 22px; margin-bottom: 8px; }
+    .tl-text { font-size: 15px; color: var(--gray-600); line-height: 1.65; }
+
+    /* Team */
+    .team-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+    .team-card {
+      text-align: center;
+      padding: 32px 20px;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      transition: all var(--transition);
+    }
+    .team-card:hover { border-color: var(--blue-mid); transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .team-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: var(--blue-pale);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 32px;
+      color: var(--blue-core);
+      margin: 0 auto 16px;
+      border: 3px solid var(--blue-mid);
+    }
+    .team-name { font-family: var(--font-display); font-size: 20px; margin-bottom: 4px; }
+    .team-role { font-size: 13px; color: var(--blue-core); font-weight: 600; margin-bottom: 8px; font-family: var(--font-mono); }
+    .team-bio { font-size: 13px; color: var(--gray-600); line-height: 1.6; }
+    .team-links { margin-top: 16px; display: flex; justify-content: center; gap: 12px; }
+    .team-link {
+      width: 32px; height: 32px;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; text-decoration: none; color: var(--gray-600);
+      transition: all var(--transition);
+    }
+    .team-link:hover { border-color: var(--blue-core); color: var(--blue-core); }
+
+    /* Values */
+    .values-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+    .value-card {
+      padding: 40px 32px;
+      background: var(--gray-100);
+      border-radius: var(--radius-lg);
+      border-left: 4px solid var(--blue-core);
+    }
+    .value-num {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--blue-core);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .value-title { font-family: var(--font-display); font-size: 24px; margin-bottom: 12px; }
+    .value-text { font-size: 15px; color: var(--gray-600); line-height: 1.65; }
+
+    /* Investors */
+    .investor-grid { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
+    .investor-item {
+      padding: 16px 28px;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      font-family: var(--font-display);
+      font-size: 18px;
+      color: var(--gray-600);
+      letter-spacing: 0.5px;
+      transition: all var(--transition);
+    }
+    .investor-item:hover { border-color: var(--blue-mid); color: var(--black); }
+
+    @media (max-width: 900px) {
+      .team-grid { grid-template-columns: repeat(2,1fr); }
+      .values-grid { grid-template-columns: 1fr; }
+      .tl-item { grid-template-columns: 80px 1fr; }
+      .timeline::before { left: 40px; }
+      .tl-item::before { left: 33px; }
+    }
+    @media (max-width: 600px) {
+      .team-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon"></div>
+      <span class="nav-logo-text">Nova<span>Mind</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="features.html">Features</a>
+      <a href="solutions.html">Solutions</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="contact.html" class="btn-nav">Get Started</a>
+    </div>
+    <button class="nav-hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="hero-inner reveal">
+      <div class="section-label" style="background:rgba(255,255,255,0.1);color:white">Our Story</div>
+      <h1 class="section-heading" style="margin-top:16px">WE BELIEVE<br>AI SHOULD<br>WORK FOR<br><span>EVERYONE.</span></h1>
+      <p class="section-sub">NovaMind was founded by engineers who got tired of AI being accessible only to teams with massive budgets and dedicated research labs. We built the tools we always wished existed.</p>
+    </div>
+  </section>
+
+  <!-- MISSION -->
+  <div class="mission-block">
+    <div class="mission-quote reveal">"TO MAKE ENTERPRISE-GRADE AI INTELLIGENCE ACCESSIBLE TO EVERY TEAM ON EARTH — REGARDLESS OF SIZE OR BUDGET."</div>
+    <div class="mission-attr reveal">— NovaMind AI Mission Statement, 2022</div>
+  </div>
+
+  <!-- STATS BAND -->
+  <section style="padding:64px 5%;border-bottom:1px solid var(--gray-200)">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:32px;text-align:center" class="reveal">
+        <div>
+          <div class="stat-num" data-count="12000" data-suffix="+" data-dec="0">0+</div>
+          <div class="stat-label">Teams worldwide</div>
+        </div>
+        <div>
+          <div class="stat-num" data-count="52" data-suffix="" data-dec="0">0</div>
+          <div class="stat-label">Team members</div>
+        </div>
+        <div>
+          <div class="stat-num" data-count="18" data-suffix="" data-dec="0">0</div>
+          <div class="stat-label">Countries served</div>
+        </div>
+        <div>
+          <div class="stat-num" data-count="24" data-suffix="M" data-prefix="$" data-dec="0">$0M</div>
+          <div class="stat-label">Series A raised</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="section">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:64px" class="reveal">
+        <div class="section-label" style="display:inline-flex">Our Journey</div>
+        <h2 class="section-heading" style="margin-top:16px">FROM IDEA<br>TO <span>IMPACT</span></h2>
+      </div>
+      <div class="timeline">
+        <div class="tl-item reveal">
+          <div class="tl-year">2022</div>
+          <div class="tl-content">
+            <div class="tl-title">FOUNDED IN A GARAGE</div>
+            <p class="tl-text">Three engineers — Elena, Marcus, and James — quit their Big Tech jobs and started building NovaMind in a San Francisco garage. Fueled by conviction that AI tooling was broken for 99% of companies.</p>
+          </div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-year">2022</div>
+          <div class="tl-content">
+            <div class="tl-title">FIRST 100 CUSTOMERS</div>
+            <p class="tl-text">Launched private beta. Reached 100 paying customers in 6 weeks through developer communities. Zero marketing spend — pure word of mouth.</p>
+          </div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-year">2023</div>
+          <div class="tl-content">
+            <div class="tl-title">$4M SEED ROUND</div>
+            <p class="tl-text">Closed oversubscribed seed round led by Horizon Ventures. Grew team to 15 engineers and launched the Automation Engine — our flagship product.</p>
+          </div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-year">2023</div>
+          <div class="tl-content">
+            <div class="tl-title">SOC 2 CERTIFICATION</div>
+            <p class="tl-text">Achieved SOC 2 Type II certification and signed first enterprise contracts. Deployed NovaMind into Fortune 500 infrastructure for the first time.</p>
+          </div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-year">2024</div>
+          <div class="tl-content">
+            <div class="tl-title">$24M SERIES A</div>
+            <p class="tl-text">Led by SequoiaAI Partners with participation from a16z and Insight Partners. Used to scale engineering to 52 people across 3 time zones and launch the Predictive Intelligence Engine.</p>
+          </div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-year">2025</div>
+          <div class="tl-content">
+            <div class="tl-title">12,000 TEAMS. 18 COUNTRIES.</div>
+            <p class="tl-text">NovaMind now serves teams across finance, healthcare, e-commerce, and tech — processing over 2.4 billion API requests per month with 99.9% uptime.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section class="section" style="background:var(--gray-100)">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:56px" class="reveal">
+        <div class="section-label" style="display:inline-flex">The Team</div>
+        <h2 class="section-heading" style="margin-top:16px">BUILT BY<br><span>BUILDERS</span></h2>
+        <p class="section-sub" style="margin:16px auto 0;text-align:center">Ex-Google, ex-OpenAI, ex-Stripe engineers who chose to build the tools they always needed.</p>
+      </div>
+      <div class="team-grid">
+        <div class="team-card reveal reveal-delay-1">
+          <div class="team-avatar">E</div>
+          <div class="team-name">ELENA VASQUEZ</div>
+          <div class="team-role">CEO & Co-Founder</div>
+          <p class="team-bio">Former Google DeepMind researcher. PhD in ML from Stanford. 12 years building AI systems at scale.</p>
+          <div class="team-links">
+            <a href="#" class="team-link">in</a>
+            <a href="#" class="team-link">𝕏</a>
+          </div>
+        </div>
+        <div class="team-card reveal reveal-delay-2">
+          <div class="team-avatar">M</div>
+          <div class="team-name">MARCUS CHEN</div>
+          <div class="team-role">CTO & Co-Founder</div>
+          <p class="team-bio">Former Stripe infrastructure lead. Built payment systems processing $200B+ in transactions.</p>
+          <div class="team-links">
+            <a href="#" class="team-link">in</a>
+            <a href="#" class="team-link">𝕏</a>
+          </div>
+        </div>
+        <div class="team-card reveal reveal-delay-3">
+          <div class="team-avatar">J</div>
+          <div class="team-name">JAMES OKAFOR</div>
+          <div class="team-role">CPO & Co-Founder</div>
+          <p class="team-bio">Former OpenAI product lead. Helped launch GPT-3 API and served 100K+ developers.</p>
+          <div class="team-links">
+            <a href="#" class="team-link">in</a>
+            <a href="#" class="team-link">𝕏</a>
+          </div>
+        </div>
+        <div class="team-card reveal reveal-delay-4">
+          <div class="team-avatar">S</div>
+          <div class="team-name">SARA NIELSEN</div>
+          <div class="team-role">VP of Engineering</div>
+          <p class="team-bio">10 years at AWS building distributed systems. Led teams of 80+ across cloud infrastructure.</p>
+          <div class="team-links">
+            <a href="#" class="team-link">in</a>
+            <a href="#" class="team-link">𝕏</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section class="section">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:56px" class="reveal">
+        <div class="section-label" style="display:inline-flex">Our Values</div>
+        <h2 class="section-heading" style="margin-top:16px">WHAT WE<br><span>STAND FOR</span></h2>
+      </div>
+      <div class="values-grid">
+        <div class="value-card reveal reveal-delay-1">
+          <div class="value-num">01 — Principle</div>
+          <div class="value-title">RADICAL TRANSPARENCY</div>
+          <p class="value-text">We show our work. Every model decision is explainable. Every pricing change is communicated in advance. No hidden fees, no black boxes.</p>
+        </div>
+        <div class="value-card reveal reveal-delay-2">
+          <div class="value-num">02 — Principle</div>
+          <div class="value-title">OBSESSIVE RELIABILITY</div>
+          <p class="value-text">Downtime is a broken promise. We engineer for 99.99% uptime and treat every incident as a personal failure. Reliability is non-negotiable.</p>
+        </div>
+        <div class="value-card reveal reveal-delay-3">
+          <div class="value-num">03 — Principle</div>
+          <div class="value-title">DEMOCRATIZE AI</div>
+          <p class="value-text">Enterprise-grade intelligence shouldn't require enterprise-grade budgets. We price to make NovaMind accessible to teams of 2 and teams of 2,000.</p>
+        </div>
+        <div class="value-card reveal reveal-delay-1">
+          <div class="value-num">04 — Principle</div>
+          <div class="value-title">PRIVACY FIRST</div>
+          <p class="value-text">Your data is yours. We never train on your private data without consent. Full GDPR and CCPA compliance is the floor, not the ceiling.</p>
+        </div>
+        <div class="value-card reveal reveal-delay-2">
+          <div class="value-num">05 — Principle</div>
+          <div class="value-title">SHIP, THEN ITERATE</div>
+          <p class="value-text">We deploy weekly. Imperfect and live beats perfect and delayed. We listen hard, move fast, and treat feedback as a gift.</p>
+        </div>
+        <div class="value-card reveal reveal-delay-3">
+          <div class="value-num">06 — Principle</div>
+          <div class="value-title">RESPONSIBLE AI</div>
+          <p class="value-text">We maintain an AI ethics board and publish annual transparency reports. We believe powerful AI demands proportional accountability.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INVESTORS -->
+  <section class="section" style="background:var(--gray-100)">
+    <div class="container" style="text-align:center">
+      <div class="reveal">
+        <div class="section-label" style="display:inline-flex">Backed By</div>
+        <h2 class="section-heading" style="margin:16px auto 48px">WORLD-CLASS<br><span>INVESTORS</span></h2>
+      </div>
+      <div class="investor-grid reveal">
+        <div class="investor-item">SEQUOIA AI</div>
+        <div class="investor-item">ANDREESSEN HOROWITZ</div>
+        <div class="investor-item">INSIGHT PARTNERS</div>
+        <div class="investor-item">HORIZON VENTURES</div>
+        <div class="investor-item">YC W22</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="padding:80px 5%;text-align:center">
+    <div class="container reveal">
+      <div class="section-label" style="display:inline-flex">Join Us</div>
+      <h2 class="section-heading" style="margin:16px auto">READY TO BUILD<br>THE FUTURE WITH <span>US?</span></h2>
+      <p class="section-sub" style="margin:16px auto 36px;text-align:center">We're hiring across engineering, product, and sales. Come build AI that matters.</p>
+      <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap">
+        <a href="contact.html" class="btn-primary">View Open Roles</a>
+        <a href="contact.html" class="btn-outline">Talk to Sales</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><div class="nav-logo" style="margin-bottom:0"><div class="nav-logo-icon"></div><span class="nav-logo-text" style="color:white">Nova<span>Mind</span></span></div><p>Intelligence, Engineered.</p></div>
+        <div class="footer-col"><h4>Product</h4><a href="features.html">Features</a><a href="pricing.html">Pricing</a><a href="solutions.html">Solutions</a></div>
+        <div class="footer-col"><h4>Company</h4><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+        <div class="footer-col"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a></div>
+      </div>
+      <div class="footer-bottom"><span>© 2025 NovaMind AI, Inc. All rights reserved.</span></div>
+    </div>
+  </footer>
+
+  <script src="shared.js"></script>
+</body>
+</html>

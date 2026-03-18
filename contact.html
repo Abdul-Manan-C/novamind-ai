@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — NovaMind AI</title>
+  <meta name="description" content="Get in touch with NovaMind AI. Start your free trial, talk to sales, or get support." />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+
+    /* Left panel */
+    .contact-left {
+      background: var(--black);
+      padding: 160px 64px 80px;
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .contact-left::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 0% 50%, rgba(26,107,255,0.2) 0%, transparent 60%);
+    }
+    .contact-left-inner { position: relative; z-index: 2; }
+    .contact-heading {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 5vw, 80px);
+      color: white;
+      line-height: 0.95;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+    .contact-heading span { color: var(--blue-light); }
+    .contact-sub { font-size: 16px; color: rgba(255,255,255,0.55); line-height: 1.7; margin-bottom: 48px; }
+
+    .contact-methods { display: flex; flex-direction: column; gap: 20px; }
+    .contact-method {
+      display: flex; align-items: flex-start; gap: 16px;
+    }
+    .contact-method-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .contact-method-icon svg { width: 20px; height: 20px; stroke: var(--blue-light); }
+    .contact-method-label {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .contact-method-value {
+      font-size: 15px;
+      color: white;
+      font-weight: 500;
+    }
+
+    /* Right panel */
+    .contact-right {
+      background: var(--white);
+      padding: 160px 64px 80px;
+      display: flex; align-items: center;
+    }
+    .contact-form-wrap { width: 100%; max-width: 480px; }
+    .contact-form-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+    .contact-form-sub { font-size: 15px; color: var(--gray-600); margin-bottom: 36px; }
+
+    .form-row { margin-bottom: 20px; }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-800);
+      margin-bottom: 8px;
+      font-family: var(--font-mono);
+      letter-spacing: 0.3px;
+    }
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .form-select {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--black);
+      background: var(--white);
+      outline: none;
+      cursor: none;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ba5b4' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .form-select:focus {
+      border-color: var(--blue-core);
+      box-shadow: 0 0 0 4px rgba(26,107,255,0.1);
+    }
+
+    .form-submit {
+      width: 100%;
+      padding: 16px;
+      background: var(--blue-core);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: none;
+      transition: all var(--transition);
+      letter-spacing: 0.3px;
+    }
+    .form-submit:hover {
+      background: var(--blue-light);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(26,107,255,0.3);
+    }
+
+    /* Success state */
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 48px 24px;
+    }
+    .success-icon {
+      width: 80px; height: 80px;
+      background: var(--blue-pale);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 36px;
+    }
+    .success-title { font-family: var(--font-display); font-size: 32px; margin-bottom: 10px; }
+    .success-sub { font-size: 15px; color: var(--gray-600); line-height: 1.7; }
+
+    /* Offices */
+    .offices-section { padding: 80px 5%; background: var(--gray-100); }
+    .offices-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 48px; }
+    .office-card {
+      padding: 28px;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+    }
+    .office-city { font-family: var(--font-display); font-size: 22px; margin-bottom: 4px; }
+    .office-type { font-size: 11px; font-family: var(--font-mono); color: var(--blue-core); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+    .office-addr { font-size: 14px; color: var(--gray-600); line-height: 1.6; }
+
+    @media (max-width: 900px) {
+      .contact-layout { grid-template-columns: 1fr; }
+      .contact-left { padding: 140px 5% 60px; }
+      .contact-right { padding: 60px 5% 80px; }
+      .offices-grid { grid-template-columns: 1fr; }
+      .form-grid-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon"></div>
+      <span class="nav-logo-text">Nova<span>Mind</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="features.html">Features</a>
+      <a href="solutions.html">Solutions</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="contact.html" class="btn-nav">Get Started</a>
+    </div>
+    <button class="nav-hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <!-- CONTACT LAYOUT -->
+  <div class="contact-layout">
+    <!-- LEFT -->
+    <div class="contact-left">
+      <div class="contact-left-inner reveal">
+        <div class="section-label" style="background:rgba(255,255,255,0.1);color:white;margin-bottom:24px">Contact Us</div>
+        <h1 class="contact-heading">LET'S BUILD<br>SOMETHING<br><span>GREAT.</span></h1>
+        <p class="contact-sub">Whether you're ready to start, have questions, or want a custom enterprise demo — our team responds within 2 business hours.</p>
+
+        <div class="contact-methods">
+          <div class="contact-method">
+            <div class="contact-method-icon">
+              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+            </div>
+            <div>
+              <div class="contact-method-label">Email</div>
+              <div class="contact-method-value">hello@novamind.ai</div>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-method-icon">
+              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+            </div>
+            <div>
+              <div class="contact-method-label">Sales</div>
+              <div class="contact-method-value">+1 (415) 920-3100</div>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-method-icon">
+              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z"/></svg>
+            </div>
+            <div>
+              <div class="contact-method-label">Live Chat</div>
+              <div class="contact-method-value">Available 9AM–6PM PST</div>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-method-icon">
+              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+            </div>
+            <div>
+              <div class="contact-method-label">HQ</div>
+              <div class="contact-method-value">548 Market St, San Francisco</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="contact-right">
+      <div class="contact-form-wrap">
+        <!-- Form -->
+        <div id="contactForm">
+          <div class="contact-form-title">GET IN TOUCH</div>
+          <p class="contact-form-sub">Fill in the form — we'll respond within 2 hours.</p>
+
+          <div class="form-row form-grid-2">
+            <div>
+              <label class="form-label">First Name</label>
+              <input type="text" class="input-field" placeholder="Elena" id="firstName" />
+            </div>
+            <div>
+              <label class="form-label">Last Name</label>
+              <input type="text" class="input-field" placeholder="Vasquez" id="lastName" />
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-label">Work Email</label>
+            <input type="email" class="input-field" placeholder="elena@company.com" id="email" />
+          </div>
+          <div class="form-row">
+            <label class="form-label">Company</label>
+            <input type="text" class="input-field" placeholder="Acme Corp" id="company" />
+          </div>
+          <div class="form-row">
+            <label class="form-label">I'm interested in...</label>
+            <select class="form-select" id="intent">
+              <option value="">Select an option</option>
+              <option>Starting a free trial</option>
+              <option>Enterprise / Sales demo</option>
+              <option>Technical integration help</option>
+              <option>Partnerships</option>
+              <option>General inquiry</option>
+              <option>Careers</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label class="form-label">Message</label>
+            <textarea class="input-field" placeholder="Tell us about your use case, team size, or any questions you have..." id="message"></textarea>
+          </div>
+          <div class="form-row" style="display:flex;align-items:flex-start;gap:12px;margin-bottom:28px">
+            <input type="checkbox" id="agree" style="margin-top:3px;accent-color:var(--blue-core);" />
+            <label for="agree" style="font-size:13px;color:var(--gray-600);cursor:none">
+              I agree to NovaMind's <a href="#" style="color:var(--blue-core)">Privacy Policy</a> and consent to receiving product communications.
+            </label>
+          </div>
+          <button class="form-submit" id="submitBtn" onclick="handleSubmit(event)">
+            Send Message →
+          </button>
+          <p style="font-size:12px;color:var(--gray-400);margin-top:12px;text-align:center">🔒 Your data is encrypted and never sold.</p>
+        </div>
+
+        <!-- Success -->
+        <div class="form-success" id="formSuccess">
+          <div class="success-icon">✓</div>
+          <div class="success-title">MESSAGE SENT!</div>
+          <p class="success-sub">Thanks for reaching out. Our team will get back to you within 2 business hours.<br><br>In the meantime, explore our <a href="features.html" style="color:var(--blue-core)">features</a> or <a href="pricing.html" style="color:var(--blue-core)">pricing</a>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OFFICES -->
+  <section class="offices-section">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label">Our Offices</div>
+        <h2 class="section-heading" style="margin-top:16px">WHERE WE<br><span>OPERATE</span></h2>
+      </div>
+      <div class="offices-grid">
+        <div class="office-card reveal reveal-delay-1">
+          <div class="office-type">Headquarters</div>
+          <div class="office-city">SAN FRANCISCO</div>
+          <p class="office-addr">548 Market Street, Suite 1200<br>San Francisco, CA 94104<br>United States</p>
+        </div>
+        <div class="office-card reveal reveal-delay-2">
+          <div class="office-type">Engineering Hub</div>
+          <div class="office-city">LONDON</div>
+          <p class="office-addr">40 Bank Street, Level 12<br>Canary Wharf<br>London, E14 5NR, UK</p>
+        </div>
+        <div class="office-card reveal reveal-delay-3">
+          <div class="office-type">Asia Pacific</div>
+          <div class="office-city">SINGAPORE</div>
+          <p class="office-addr">1 Raffles Quay, #28-10<br>North Tower<br>Singapore 048583</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ MINI -->
+  <section class="section">
+    <div class="container" style="max-width:760px;text-align:center">
+      <div class="reveal">
+        <div class="section-label" style="display:inline-flex">Quick Answers</div>
+        <h2 class="section-heading" style="margin:16px auto">BEFORE YOU<br><span>REACH OUT</span></h2>
+      </div>
+      <div style="text-align:left;margin-top:48px">
+        <div style="padding:24px 0;border-bottom:1px solid var(--gray-200)" class="reveal">
+          <div style="font-weight:700;margin-bottom:8px">How quickly will I get a response?</div>
+          <p style="font-size:15px;color:var(--gray-600)">Sales and trial inquiries are responded to within 2 business hours. Support tickets are addressed within 4 hours for Pro and 1 hour for Enterprise.</p>
+        </div>
+        <div style="padding:24px 0;border-bottom:1px solid var(--gray-200)" class="reveal">
+          <div style="font-weight:700;margin-bottom:8px">Can I book a live demo?</div>
+          <p style="font-size:15px;color:var(--gray-600)">Absolutely. Select "Enterprise / Sales demo" in the form above and we'll schedule a personalized walkthrough with a solution engineer.</p>
+        </div>
+        <div style="padding:24px 0" class="reveal">
+          <div style="font-weight:700;margin-bottom:8px">I'm a developer — where's the API docs?</div>
+          <p style="font-size:15px;color:var(--gray-600)">Head to <a href="#" style="color:var(--blue-core)">docs.novamind.ai</a> for full API documentation, SDKs, and integration guides. Start with our quickstart guide.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><div class="nav-logo" style="margin-bottom:0"><div class="nav-logo-icon"></div><span class="nav-logo-text" style="color:white">Nova<span>Mind</span></span></div><p>Intelligence, Engineered.</p></div>
+        <div class="footer-col"><h4>Product</h4><a href="features.html">Features</a><a href="pricing.html">Pricing</a><a href="solutions.html">Solutions</a></div>
+        <div class="footer-col"><h4>Company</h4><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+        <div class="footer-col"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a></div>
+      </div>
+      <div class="footer-bottom"><span>© 2025 NovaMind AI, Inc. All rights reserved.</span></div>
+    </div>
+  </footer>
+
+  <script src="shared.js"></script>
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault();
+      const first = document.getElementById('firstName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const agree = document.getElementById('agree').checked;
+      const btn = document.getElementById('submitBtn');
+
+      if (!first || !email) {
+        btn.style.background = '#ef4444';
+        btn.textContent = 'Please fill required fields';
+        setTimeout(() => {
+          btn.style.background = '';
+          btn.textContent = 'Send Message →';
+        }, 2000);
+        return;
+      }
+      if (!agree) {
+        btn.style.background = '#ef4444';
+        btn.textContent = 'Please accept the privacy policy';
+        setTimeout(() => { btn.style.background = ''; btn.textContent = 'Send Message →'; }, 2000);
+        return;
+      }
+
+      // Animate
+      btn.textContent = 'Sending...';
+      btn.style.background = 'var(--blue-light)';
+      setTimeout(() => {
+        document.getElementById('contactForm').style.display = 'none';
+        const success = document.getElementById('formSuccess');
+        success.style.display = 'block';
+        success.style.animation = 'fadeIn 0.5s ease';
+      }, 900);
+    }
+  </script>
+  <style>
+    @keyframes fadeIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+  </style>
+</body>
+</html>

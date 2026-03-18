@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing — NovaMind AI</title>
+  <meta name="description" content="Simple, transparent pricing for NovaMind AI. Start free, scale as you grow." />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .page-hero {
+      padding: 160px 5% 80px;
+      background: var(--gray-100);
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+
+    /* Toggle */
+    .billing-toggle {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: var(--gray-200);
+      border-radius: 100px;
+      padding: 4px;
+      margin-bottom: 56px;
+    }
+    .toggle-btn {
+      padding: 8px 20px;
+      border-radius: 100px;
+      border: none;
+      background: transparent;
+      font-family: var(--font-body);
+      font-size: 14px; font-weight: 500;
+      color: var(--gray-600);
+      cursor: none;
+      transition: all var(--transition);
+    }
+    .toggle-btn.active {
+      background: var(--blue-core);
+      color: white;
+    }
+    .save-badge {
+      padding: 3px 10px;
+      background: #22c55e;
+      color: white;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+
+    /* Pricing cards */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .price-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 40px 36px;
+      position: relative;
+      transition: all var(--transition);
+    }
+    .price-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .price-card.featured {
+      border-color: var(--blue-core);
+      background: var(--blue-core);
+      color: white;
+    }
+    .price-card.featured .price-label,
+    .price-card.featured .price-sub,
+    .price-card.featured .price-feature { color: rgba(255,255,255,0.8); }
+    .price-card.featured .price-name { color: white; }
+    .price-card.featured .price-num { color: white; }
+    .price-card.featured .price-divider { background: rgba(255,255,255,0.2); }
+    .featured-badge {
+      position: absolute;
+      top: -12px; left: 50%;
+      transform: translateX(-50%);
+      background: #f59e0b;
+      color: white;
+      padding: 4px 16px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    .price-name {
+      font-family: var(--font-display);
+      font-size: 20px;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .price-label {
+      font-size: 13px;
+      color: var(--gray-400);
+      margin-bottom: 24px;
+    }
+    .price-num {
+      font-family: var(--font-display);
+      font-size: 56px;
+      line-height: 1;
+      color: var(--black);
+    }
+    .price-num sup {
+      font-size: 24px;
+      vertical-align: super;
+      font-family: var(--font-body);
+      font-weight: 700;
+    }
+    .price-sub {
+      font-size: 13px;
+      color: var(--gray-400);
+      margin-top: 4px;
+      margin-bottom: 28px;
+    }
+    .price-divider {
+      height: 1px;
+      background: var(--gray-200);
+      margin-bottom: 28px;
+    }
+    .price-features { list-style: none; margin-bottom: 32px; }
+    .price-feature {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 14px; color: var(--gray-600);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+    .price-feature-check { flex-shrink: 0; font-size: 15px; }
+    .price-feature-check.yes { color: #22c55e; }
+    .price-feature-check.no { color: var(--gray-300); }
+    .price-card.featured .price-feature-check.yes { color: #86efac; }
+
+    .btn-price-featured {
+      display: block; width: 100%; text-align: center;
+      padding: 14px;
+      background: white;
+      color: var(--blue-core);
+      border-radius: var(--radius);
+      font-size: 15px; font-weight: 700;
+      text-decoration: none;
+      cursor: none;
+      transition: all var(--transition);
+    }
+    .btn-price-featured:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+
+    /* FAQ */
+    .faq-item {
+      border-bottom: 1px solid var(--gray-200);
+      padding: 24px 0;
+    }
+    .faq-question {
+      display: flex; justify-content: space-between; align-items: center;
+      cursor: none;
+      font-size: 16px; font-weight: 600;
+    }
+    .faq-question::after {
+      content: '+';
+      font-size: 24px;
+      font-weight: 300;
+      color: var(--blue-core);
+      transition: transform var(--transition);
+    }
+    .faq-item.open .faq-question::after { transform: rotate(45deg); }
+    .faq-answer {
+      font-size: 15px; color: var(--gray-600); line-height: 1.7;
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.3s;
+    }
+    .faq-item.open .faq-answer { max-height: 200px; padding-top: 16px; }
+
+    /* Enterprise strip */
+    .enterprise-strip {
+      background: var(--black);
+      padding: 64px 5%;
+      border-radius: var(--radius-lg);
+      margin: 48px 0;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 32px; align-items: center;
+    }
+    .enterprise-strip h3 {
+      font-family: var(--font-display);
+      font-size: 40px;
+      color: white;
+      margin-bottom: 10px;
+    }
+    .enterprise-strip p { color: rgba(255,255,255,0.6); font-size: 15px; }
+
+    @media (max-width: 900px) {
+      .pricing-grid { grid-template-columns: 1fr; max-width: 480px; }
+      .enterprise-strip { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon"></div>
+      <span class="nav-logo-text">Nova<span>Mind</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="features.html">Features</a>
+      <a href="solutions.html">Solutions</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="contact.html" class="btn-nav">Get Started</a>
+    </div>
+    <button class="nav-hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="reveal">
+      <div class="section-label" style="justify-content:center;display:inline-flex">Pricing</div>
+      <h1 class="section-heading" style="margin:16px auto">SIMPLE.<br>TRANSPARENT.<br><span>SCALABLE.</span></h1>
+      <p class="section-sub" style="margin:20px auto 36px;text-align:center">Start free. Scale on your terms. No hidden fees, no lock-in.</p>
+
+      <div class="billing-toggle" id="billingToggle">
+        <button class="toggle-btn active" data-period="monthly">Monthly</button>
+        <button class="toggle-btn" data-period="annual">Annual <span class="save-badge">SAVE 20%</span></button>
+      </div>
+    </div>
+
+    <!-- PRICING CARDS -->
+    <div class="pricing-grid">
+      <!-- Starter -->
+      <div class="price-card reveal reveal-delay-1">
+        <div class="price-name">STARTER</div>
+        <div class="price-label">For small teams getting started</div>
+        <div class="price-num" data-monthly="49" data-annual="39"><sup>$</sup><span class="price-amount">49</span></div>
+        <div class="price-sub">per month, billed monthly</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li class="price-feature"><span class="price-feature-check yes">✓</span>Up to 3 team members</li>
+          <li class="price-feature"><span class="price-feature-check yes">✓</span>100K API requests/month</li>
+          <li class="price-feature"><span class="price-feature-check yes">✓</span>2 custom AI models</li>
+          <li class="price-feature"><span class="price-feature-check yes">✓</span>30-day data retention</li>
+          <li class="price-feature"><span class="price-feature-check yes">✓</span>Basic analytics dashboard</li>
+          <li class="price-feature"><span class="price-feature-check no">✗</span><span style="opacity:0.4">SSO / SAML</span></li>
+          <li class="price-feature"><span class="price-feature-check no">✗</span><span style="opacity:0.4">Dedicated support</span></li>
+        </ul>
+        <a href="contact.html" class="btn-outline" style="display:block;text-align:center">Start Free Trial</a>
+      </div>
+
+      <!-- Pro (Featured) -->
+      <div class="price-card featured reveal reveal-delay-2">
+        <div class="featured-badge">⭐ MOST POPULAR</div>
+        <div class="price-name">PRO</div>
+        <div class="price-label">For scaling teams and startups</div>
+        <div class="price-num" data-monthly="149" data-annual="119"><sup>$</sup><span class="price-amount">149</span></div>
+        <div class="price-sub">per month, billed monthly</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li class="price-feature"><span class="price-feature-check yes">✓</span>Up to 25 team members</li>
+          <li class="price-feature"><span class="price-feature-check yes">✓</span>5M API requests/month</li>
+          <li class="price-feature"><span class="price-feature-check yes">✓</span>20 custom AI models</li>
+          <li class="price-feature"><span class="price-feature-check yes">✓</span>1-year data retention</li>
+          <li class="price-feature"><span class="price-feature-check yes">✓</span>Advanced analytics + exports</li>
+          <li class="price-feature"><span class="price-feature-check yes">✓</span>Priority email support</li>
+          <li class="price-feature"><span class="price-feature-check no">✗</span><span style="opacity:0.6">SSO / SAML</span></li>
+        </ul>
+        <a href="contact.html" class="btn-price-featured">Get Started</a>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="price-card reveal reveal-delay-3">
+        <div class="price-name">ENTERPRISE</div>
+        <div class="price-label">For large teams and institutions</div>
+        <div class="price-num"><span class="price-amount" style="font-size:42px">Custom</span></div>
+        <div class="price-sub">Tailored to your scale</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li class="price-feature"><span class="price-feature-check yes">✓</span>Unlimited team members</li>
+          <li class="price-feature"><span class="price-feature-check yes">✓</span>Unlimited API requests</li>
+          <li class="price-feature"><span class="price-feature-check yes">✓</span>Unlimited AI models</li>
+          <li class="price-feature"><span class="price-feature-check yes">✓</span>Custom data retention</li>
+          <li class="price-feature"><span class="price-feature-check yes">✓</span>SSO / SAML / SCIM</li>
+          <li class="price-feature"><span class="price-feature-check yes">✓</span>Dedicated CSM & SLA</li>
+          <li class="price-feature"><span class="price-feature-check yes">✓</span>On-premise deployment</li>
+        </ul>
+        <a href="contact.html" class="btn-primary" style="display:block;text-align:center">Talk to Sales</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENTERPRISE STRIP -->
+  <section class="section-sm" style="padding-left:5%;padding-right:5%">
+    <div class="container">
+      <div class="enterprise-strip reveal">
+        <div>
+          <div class="mono-tag" style="color:var(--blue-light);margin-bottom:12px">Enterprise Program</div>
+          <h3>NEED SOMETHING BIGGER?</h3>
+          <p>Volume discounts, custom SLAs, dedicated infrastructure, and white-glove onboarding. Let's build your AI roadmap together.</p>
+        </div>
+        <a href="contact.html" class="btn-primary" style="white-space:nowrap">Contact Sales</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARISON TABLE -->
+  <section class="section" style="background:var(--gray-100)">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:48px" class="reveal">
+        <div class="section-label" style="display:inline-flex">Compare Plans</div>
+        <h2 class="section-heading" style="margin-top:16px">WHAT'S<br><span>INCLUDED</span></h2>
+      </div>
+      <div style="border:1px solid var(--gray-200);border-radius:var(--radius-lg);overflow:auto;background:white" class="reveal">
+        <table style="width:100%;border-collapse:collapse;min-width:600px">
+          <thead>
+            <tr style="background:var(--gray-100)">
+              <th style="padding:16px 24px;text-align:left;font-size:12px;font-family:var(--font-mono);color:var(--gray-400);letter-spacing:1px;text-transform:uppercase">Feature</th>
+              <th style="padding:16px;text-align:center;font-family:var(--font-display);font-size:18px">STARTER</th>
+              <th style="padding:16px;text-align:center;font-family:var(--font-display);font-size:18px;color:var(--blue-core)">PRO</th>
+              <th style="padding:16px;text-align:center;font-family:var(--font-display);font-size:18px">ENTERPRISE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-top:1px solid var(--gray-200)"><td style="padding:14px 24px;font-size:14px">API Requests / Month</td><td style="text-align:center;font-size:14px;color:var(--gray-600)">100K</td><td style="text-align:center;font-size:14px;color:var(--blue-core);font-weight:600">5M</td><td style="text-align:center;font-size:14px;color:var(--gray-600)">Unlimited</td></tr>
+            <tr style="border-top:1px solid var(--gray-200);background:var(--gray-100)"><td style="padding:14px 24px;font-size:14px">Custom AI Models</td><td style="text-align:center;font-size:14px;color:var(--gray-600)">2</td><td style="text-align:center;font-size:14px;color:var(--blue-core);font-weight:600">20</td><td style="text-align:center;font-size:14px;color:var(--gray-600)">Unlimited</td></tr>
+            <tr style="border-top:1px solid var(--gray-200)"><td style="padding:14px 24px;font-size:14px">Team Members</td><td style="text-align:center;font-size:14px;color:var(--gray-600)">3</td><td style="text-align:center;font-size:14px;color:var(--blue-core);font-weight:600">25</td><td style="text-align:center;font-size:14px;color:var(--gray-600)">Unlimited</td></tr>
+            <tr style="border-top:1px solid var(--gray-200);background:var(--gray-100)"><td style="padding:14px 24px;font-size:14px">Data Retention</td><td style="text-align:center;font-size:14px;color:var(--gray-600)">30 days</td><td style="text-align:center;font-size:14px;color:var(--blue-core);font-weight:600">1 year</td><td style="text-align:center;font-size:14px;color:var(--gray-600)">Custom</td></tr>
+            <tr style="border-top:1px solid var(--gray-200)"><td style="padding:14px 24px;font-size:14px">Uptime SLA</td><td style="text-align:center;font-size:14px;color:var(--gray-600)">99.5%</td><td style="text-align:center;font-size:14px;color:var(--blue-core);font-weight:600">99.9%</td><td style="text-align:center;font-size:14px;color:var(--gray-600)">99.99%</td></tr>
+            <tr style="border-top:1px solid var(--gray-200);background:var(--gray-100)"><td style="padding:14px 24px;font-size:14px">SSO / SAML</td><td style="text-align:center;color:#d1d5db">✗</td><td style="text-align:center;color:#d1d5db">✗</td><td style="text-align:center;color:#22c55e;font-size:18px">✓</td></tr>
+            <tr style="border-top:1px solid var(--gray-200)"><td style="padding:14px 24px;font-size:14px">Dedicated Support</td><td style="text-align:center;color:#d1d5db">✗</td><td style="text-align:center;color:#d1d5db">✗</td><td style="text-align:center;color:#22c55e;font-size:18px">✓</td></tr>
+            <tr style="border-top:1px solid var(--gray-200);background:var(--gray-100)"><td style="padding:14px 24px;font-size:14px">On-Premise Deploy</td><td style="text-align:center;color:#d1d5db">✗</td><td style="text-align:center;color:#d1d5db">✗</td><td style="text-align:center;color:#22c55e;font-size:18px">✓</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container" style="max-width:760px">
+      <div style="text-align:center;margin-bottom:56px" class="reveal">
+        <div class="section-label" style="display:inline-flex">FAQ</div>
+        <h2 class="section-heading" style="margin-top:16px">GOT<br><span>QUESTIONS?</span></h2>
+      </div>
+      <div class="reveal">
+        <div class="faq-item">
+          <div class="faq-question">Is there a free trial?</div>
+          <div class="faq-answer">Yes — every plan includes a 14-day free trial with full feature access. No credit card required to start.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Can I switch plans later?</div>
+          <div class="faq-answer">Absolutely. You can upgrade or downgrade at any time. Changes take effect immediately and billing is prorated automatically.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">What counts as an API request?</div>
+          <div class="faq-answer">Every call to our inference, analytics, or automation API counts as one request. Dashboard views and internal health checks are not counted.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Do you offer nonprofit or academic discounts?</div>
+          <div class="faq-answer">Yes! Nonprofits and academic institutions receive 40% off any plan. Contact our sales team with verification documents to get your discount applied.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Is my data secure and private?</div>
+          <div class="faq-answer">NovaMind is SOC 2 Type II certified and fully GDPR compliant. Your data is encrypted at rest and in transit. We never train models on your private data without explicit consent.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><div class="nav-logo" style="margin-bottom:0"><div class="nav-logo-icon"></div><span class="nav-logo-text" style="color:white">Nova<span>Mind</span></span></div><p>Intelligence, Engineered.</p></div>
+        <div class="footer-col"><h4>Product</h4><a href="features.html">Features</a><a href="pricing.html">Pricing</a><a href="solutions.html">Solutions</a></div>
+        <div class="footer-col"><h4>Company</h4><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+        <div class="footer-col"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a></div>
+      </div>
+      <div class="footer-bottom"><span>© 2025 NovaMind AI, Inc. All rights reserved.</span></div>
+    </div>
+  </footer>
+
+  <script src="shared.js"></script>
+  <script>
+    // Billing toggle
+    const toggleBtns = document.querySelectorAll('.toggle-btn');
+    const priceAmounts = document.querySelectorAll('.price-num[data-monthly]');
+    toggleBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        toggleBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const period = btn.dataset.period;
+        priceAmounts.forEach(card => {
+          const amt = period === 'annual' ? card.dataset.annual : card.dataset.monthly;
+          const span = card.querySelector('.price-amount');
+          if(span) span.textContent = amt;
+          const sub = card.nextElementSibling;
+          if(sub && sub.classList.contains('price-sub')) {
+            sub.textContent = period === 'annual' ? 'per month, billed annually' : 'per month, billed monthly';
+          }
+        });
+      });
+    });
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-item').forEach(item => {
+      item.querySelector('.faq-question').addEventListener('click', () => {
+        const wasOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if(!wasOpen) item.classList.add('open');
+      });
+    });
+  </script>
+</body>
+</html>
