@@ -1,4 +1,4 @@
-# 🍎 Mac Vision — Apple Reseller Website Template
+# 🤖 NovaMind AI — SaaS Website Template
 
 
 
@@ -21,19 +21,19 @@
 
 
 
-> ⚠️ **This is a frontend template — not a real business.**
-> Mac Vision is a demo website built to showcase frontend development skills. The brand, products, and content are fictional. This template is available for purchase and can be customized for your business.
+> ⚠️ **This is a frontend template — not a real product.**
+> NovaMind AI is a demo SaaS website built to showcase frontend development skills. The brand, features, pricing, and company details are fictional. This template is available for purchase and can be customized for your AI/SaaS business.
 
 ## 🌐 Live Preview
-**[https://abdul-manan-c.github.io/mac-vision/](https://abdul-manan-c.github.io/mac-vision/)**
+**[https://abdul-manan-c.github.io/novamind-ai/](https://abdul-manan-c.github.io/novamind-ai/)**
 
 ---
 
 ## 💼 Want This For Your Business?
 This template can be yours — fully customized with:
 - Your brand, logo & colors
-- Your real products & pricing
-- Your contact details & location
+- Your real features & pricing plans
+- Your team & company story
 - Your domain & hosting setup
 
 **Contact the developer:**
@@ -45,20 +45,26 @@ This template can be yours — fully customized with:
 ## 📸 Pages Included
 | Page | Description |
 |------|-------------|
-| `index.html` | Hero landing, featured products, why choose us |
-| `products.html` | Full product catalog with pricing |
-| `services.html` | Repair, trade-in, and support services |
-| `gallery.html` | Store gallery and showcase |
-| `about.html` | Brand story and team |
-| `contact.html` | Contact form and location |
+| `index.html` | Hero with floating dashboard UI, features, stats, testimonials |
+| `features.html` | Full feature breakdown with diagrams and spec table |
+| `solutions.html` | Industry solutions with tab switching |
+| `pricing.html` | Billing toggle, 3 plan cards, FAQ accordion |
+| `about.html` | Company story, timeline, team, values |
+| `contact.html` | Split-panel contact form with validation |
 
 ---
 
 ## ⚡ Features
 - Fully responsive — mobile, tablet, desktop
-- Smooth scroll reveal animations
+- 3D tilt effect on dashboard (pure JS, no library)
+- Particle canvas background
+- Typed text effect
+- Scroll reveal animations
+- Counter animations
 - Custom cursor
-- Apple-inspired clean UI
+- Tab switching (Solutions page)
+- FAQ accordion (Pricing page)
+- Form validation + success state
 - Zero dependencies — CDN only
 - Deploy ready — GitHub Pages / Netlify
 
@@ -67,8 +73,9 @@ This template can be yours — fully customized with:
 ## 🛠️ Tech Stack
 - **HTML5** — Semantic structure
 - **CSS3** — Custom properties, Flexbox, Grid, animations
-- **Vanilla JS** — Interactions, scroll reveal, cursor
-- **Google Fonts** — Typography
+- **Vanilla JS** — 3D tilt, particles, typed effect, counters, cursor
+- **Google Fonts** — Bebas Neue + DM Sans + JetBrains Mono
+- **Tailwind CDN** — Utility classes
 - **GitHub Pages** — Hosting
 
 ---
